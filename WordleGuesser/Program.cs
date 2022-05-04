@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.IO;
-class Program
+﻿class Program
 {
     static void Main()
     {
@@ -15,11 +13,11 @@ class Program
         {
             Console.WriteLine($"\nEnter {suggestion} and type the response, using 'b' to indicate black, 'y' to indicate yellow, and 'g' to indicate green: ");
             input = Console.ReadLine().Trim();
-            
+
             //Validity Check
             while (input.Any(c => c != 'g' && c != 'b' && c != 'y') || input.Length != 5)
             {
-                if (input.Equals("exit") || input.Equals(suggestion))
+                if (input.Equals("exit") || input.Equals("ggggg"))
                     Environment.Exit(0);
                 Console.WriteLine("Enter a valid response: ");
                 input = Console.ReadLine().Trim().ToLower();
@@ -60,7 +58,7 @@ class Program
             Console.WriteLine($"\nSuggestion generated: {suggestion}");
 
 
-        } while (true); 
+        } while (true);
     }
 
     static IEnumerable<String> NarrowSubset(IEnumerable<String> subset, string input, string suggestion, char identifier)
@@ -80,10 +78,11 @@ class Program
                     subset = subset.Where(s => s.Contains(suggestion[index]) && s.IndexOf(suggestion[index]) != index);
                     break;
                 case 'b':
-                    subset = subset.Where(s => !s.Contains(suggestion[index]));
+                    if (!((suggestion.Substring(0, index) + suggestion.Substring(index + 1)).Contains(suggestion[index])))
+                        subset = subset.Where(s => !s.Contains(suggestion[index]));
                     break;
             }
-                    var newShortenedInput = "";
+            var newShortenedInput = "";
             for (int j = 0; j <= index; j++)
             {
                 newShortenedInput += " ";
@@ -109,7 +108,7 @@ class Program
 
     static double GetScore(char c) //Based loosely on Samuel Morse's chart of letter frequencies in proportion to q
     {
-        switch(c)
+        switch (c)
         {
             case 'i':
                 return 38.45;
@@ -119,7 +118,7 @@ class Program
                 return 35.43;
             case 's':
                 return 29.23;
-            case 'l': 
+            case 'l':
                 return 27.98;
             case 'u':
                 return 18.51;
